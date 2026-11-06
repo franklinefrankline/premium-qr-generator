@@ -22,21 +22,33 @@ MAX_URL_LENGTH = 2048
 HOST_LABEL = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$")
 
 
-def normalize_url(value):
-    """Validate a website URL and add HTTPS when no scheme was supplied."""
+def normalize_url(value, protocol="auto"):
+    """Validate a destination and infer a safe default scheme when needed."""
     if not isinstance(value, str):
-        raise ValueError("Enter a valid website URL.")
+        raise ValueError("Enter a valid website URL or IP address.")
 
     value = value.strip()
     if not value:
-        raise ValueError("Enter a website URL to get started.")
+        raise ValueError("Enter a website URL or IP address to get started.")
     if len(value) > MAX_URL_LENGTH:
         raise ValueError("That URL is too long. Please use a shorter URL.")
     if any(character.isspace() or ord(character) < 32 for character in value):
         raise ValueError("The URL cannot contain spaces or control characters.")
 
-    if not re.match(r"^[A-Za-z][A-Za-z0-9+.-]*://", value):
-        value = f"https://{value}"
+    if protocol not in ("auto", "http", "https"):
+        raise ValueError("Choose automatic protocol detection, HTTP, or HTTPS.")
+
+    has_scheme = re.match(r"^[A-Za-z][A-Za-z0-9+.-]*://", value) is not None
+    if not has_scheme:
+        try:
+            candidate_hostname = urlsplit(f"//{value}").hostname
+            ipaddress.ip_address(candidate_hostname or "")
+            is_ip_address = True
+        except ValueError:
+            is_ip_address = False
+
+        scheme = protocol if protocol != "auto" else ("http" if is_ip_address else "https")
+        value = f"{scheme}://{value}"
 
     try:
         parsed = urlsplit(value)
@@ -51,10 +63,14 @@ def normalize_url(value):
         raise ValueError("Website URLs with embedded usernames or passwords are not supported.")
     if port is not None and not 1 <= port <= 65535:
         raise ValueError("Enter a valid port number.")
+    if parsed.netloc.endswith(":"):
+        raise ValueError("Enter a valid port number.")
 
     try:
         ipaddress.ip_address(hostname)
     except ValueError:
+        if re.fullmatch(r"[0-9.]+", hostname):
+            raise ValueError("Enter a valid IP address.") from None
         try:
             ascii_hostname = hostname.encode("idna").decode("ascii")
         except UnicodeError:
@@ -71,7 +87,7 @@ def normalize_url(value):
     return value
 
 
-def make_qr_image(value):
+def make_qr_code(value):
     qr = qrcode.QRCode(
         version=None,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
@@ -80,7 +96,12 @@ def make_qr_image(value):
     )
     qr.add_data(value)
     qr.make(fit=True)
-    image = qr.make_image(fill_color="#000000", back_color="#ffffff").convert("RGB")
+    return qr
+
+
+def make_qr_image(value):
+    qr = make_qr_code(value)
+    image = qr.make_image(fill_color="#064e3b", back_color="#ffffff").convert("RGB")
     output = BytesIO()
     image.save(output, format="PNG", optimize=True)
     output.seek(0)
@@ -105,10 +126,10 @@ def home():
 def generate():
     data = request.get_json(silent=True)
     if not isinstance(data, dict):
-        return jsonify(error="Please enter a website URL."), 400
+        return jsonify(error="Please enter a website URL or IP address."), 400
 
     try:
-        value = normalize_url(data.get("url"))
+        value = normalize_url(data.get("url"), data.get("protocol", "auto"))
     except ValueError as error:
         return jsonify(error=str(error)), 400
 

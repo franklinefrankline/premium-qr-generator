@@ -53,7 +53,14 @@ h1 span { color: #278c62; }
 .clear-input:hover { color: var(--green-900); background: #f1f6f2; }
 .clear-input svg { width: 17px; height: 17px; }
 [hidden] { display: none !important; }
-.input-hint { margin: 8px 0 16px; color: #96a19a; font-size: 11px; }
+.protocol-row { display: flex; align-items: center; gap: 9px; margin-top: 12px; }
+.protocol-row label { margin: 0; color: #66746c; font-size: 11px; }
+.protocol-row select { padding: 6px 26px 6px 9px; border: 1px solid #dfe8e2; border-radius: 6px; color: #39574a; background: #fff; font-size: 11px; }
+.protocol-row span { color: #96a19a; font-size: 10px; }
+.input-hint { margin: 8px 0 7px; color: #78877e; font-size: 11px; line-height: 1.5; }
+.network-hint,.result-network-hint { color: #66796d; font-size: 10px; line-height: 1.55; }
+.network-hint { margin: 0 0 16px; padding: 9px 10px; border-radius: 6px; background: #f3f8f4; }
+.result-network-hint { margin: -5px 0 13px 37px; }
 .form-error { margin: -4px 0 14px; color: #b42318; font-size: 12px; line-height: 1.5; }
 .generate-button { position: relative; display: flex; width: 100%; height: 51px; align-items: center; justify-content: center; gap: 11px; border: 0; border-radius: 8px; color: #fff; background: var(--green-900); box-shadow: 0 5px 12px rgba(6,78,59,.16); font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s, box-shadow .2s, transform .2s; }
 .generate-button:hover { background: #0a654b; box-shadow: 0 7px 17px rgba(6,78,59,.21); transform: translateY(-1px); }

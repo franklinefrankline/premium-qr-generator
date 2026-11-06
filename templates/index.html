@@ -37,15 +37,25 @@
 
         <div class="generator-card">
           <form id="qr-form" novalidate>
-            <label for="url-input">Website URL</label>
+            <label for="url-input">Website URL or IP address</label>
             <div class="input-wrap">
               <svg class="input-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M10 13.5a4.5 4.5 0 0 0 6.36 0l3-3A4.5 4.5 0 0 0 13 4.14l-1.72 1.72M14 10.5a4.5 4.5 0 0 0-6.36 0l-3 3A4.5 4.5 0 0 0 11 19.86l1.72-1.72" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <input id="url-input" name="url" type="url" inputmode="url" autocomplete="url" placeholder="https://yourwebsite.com" maxlength="2048" aria-describedby="form-error input-hint">
+              <input id="url-input" name="url" type="text" inputmode="url" autocomplete="url" placeholder="192.168.4.1 or example.com" maxlength="2048" aria-describedby="form-error input-hint">
               <button class="clear-input" id="clear-input" type="button" aria-label="Clear URL" hidden>
                 <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m6 6 8 8m0-8-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
               </button>
             </div>
-            <p class="input-hint" id="input-hint">We’ll add https:// if your link needs it.</p>
+            <div class="protocol-row">
+              <label for="protocol-select">Protocol</label>
+              <select id="protocol-select" name="protocol">
+                <option value="auto">Auto-detect</option>
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+              </select>
+              <span>Explicit URL protocols are always preserved.</span>
+            </div>
+            <p class="input-hint" id="input-hint">IP addresses default to HTTP; domain names default to HTTPS. Ports are kept as entered.</p>
+            <p class="network-hint">Local ESP32 addresses work only when your phone can reach the device: join its Wi-Fi hotspot (Access Point mode), or connect to the same router Wi-Fi (Station mode).</p>
             <p class="form-error" id="form-error" role="alert" hidden></p>
             <button class="generate-button" id="generate-button" type="submit">
               <span class="button-label">Generate QR code</span>
@@ -59,6 +69,7 @@
               <span class="success-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m5 10.5 3.2 3.2L15.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
               <div><strong>Your QR code is ready</strong><span>Scan it with your phone camera</span></div>
             </div>
+            <p class="result-network-hint">For a local IP, connect your phone to the ESP32 hotspot or the same Wi-Fi network before scanning.</p>
             <div class="qr-display">
               <div class="qr-frame"><img id="qr-image" alt="QR code for your website"></div>
               <div class="result-details">

@@ -1,6 +1,7 @@
 (() => {
   const form = document.getElementById("qr-form");
   const input = document.getElementById("url-input");
+  const protocolSelect = document.getElementById("protocol-select");
   const generateButton = document.getElementById("generate-button");
   const clearButton = document.getElementById("clear-input");
   const errorMessage = document.getElementById("form-error");
@@ -55,7 +56,7 @@
       const response = await fetch("/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ url: input.value })
+        body: JSON.stringify({ url: input.value, protocol: protocolSelect.value })
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "We couldn’t create that QR code. Please try again.");
@@ -80,7 +81,7 @@
 
   copyButton.addEventListener("click", async () => {
     try {
-      await navigator.clipboard.writeText(resultUrl.href);
+      await navigator.clipboard.writeText(resultUrl.textContent);
       copyButton.classList.add("is-copied");
       copyButton.querySelector("span").textContent = "Copied!";
     } catch {
