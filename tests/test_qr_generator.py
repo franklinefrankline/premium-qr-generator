@@ -48,7 +48,7 @@ class QRGeneratorTests(unittest.TestCase):
                     self.assertEqual(preview.format, "PNG")
                     self.assertEqual(preview.mode, "RGB")
                     colors = {color for _, color in preview.getcolors(maxcolors=2)}
-                    self.assertEqual(colors, {(6, 78, 59), (255, 255, 255)})
+                    self.assertEqual(colors, {(0, 0, 0), (255, 255, 255)})
 
                 download = self.client.get(response.json["download_url"])
                 self.assertEqual(download.status_code, 200)

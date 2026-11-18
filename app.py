@@ -101,7 +101,7 @@ def make_qr_code(value):
 
 def make_qr_image(value):
     qr = make_qr_code(value)
-    image = qr.make_image(fill_color="#064e3b", back_color="#ffffff").convert("RGB")
+    image = qr.make_image(fill_color="#000000", back_color="#ffffff").convert("RGB")
     output = BytesIO()
     image.save(output, format="PNG", optimize=True)
     output.seek(0)

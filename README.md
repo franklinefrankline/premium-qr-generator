@@ -24,7 +24,7 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ## Use
 
-Enter a website URL or IP address and choose **Generate QR code**. Scheme-less IP addresses use `http://` by default, while domain names use `https://`; choose HTTP or HTTPS from the protocol menu when needed. An explicit scheme and any custom port are preserved. Invalid IP addresses and ports are rejected. The generated code uses high error correction, a white background, and dark-green modules. Download the PNG or copy the final destination URL.
+Enter a website URL or IP address and choose **Generate QR code**. Scheme-less IP addresses use `http://` by default, while domain names use `https://`; choose HTTP or HTTPS from the protocol menu when needed. An explicit scheme and any custom port are preserved. Invalid IP addresses and ports are rejected. The generated code uses high error correction, a white background, and black modules. Download the PNG or copy the final destination URL.
 
 For ESP32 Access Point mode, connect the phone to the ESP32 hotspot before scanning. For Station mode, connect the phone to the same Wi-Fi router as the ESP32. Local IP addresses are reachable only from a device with network access to the ESP32.
 
